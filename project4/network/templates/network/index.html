@@ -1,5 +1,33 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+<!-- Make toggle to hide/view New Post tab -->
+    <div class="NewPost">
+        <h2>New Post</h2>
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <div class="AllPosts">
+        <h2>All Posts</h2>
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <h5>{{ post.author }}</h5>
+                    <div>
+                        <a href="#">Edit</a>
+                    </div>
+                    <p>{{ post.content }}</p>
+                    <p>{{ post.date }}</p>
+                </li>
+            {% empty %}
+                <p>There are no posts yet!</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+
 {% endblock %}
