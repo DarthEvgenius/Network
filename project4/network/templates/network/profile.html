@@ -1,0 +1,27 @@
+{% extends "network/layout.html" %}
+
+{% block title %}
+	Profile
+{% endblock %}
+
+{% block body %}
+
+<h1>{{ profile }} ({{ profile.email }})</h1>
+
+<div>
+	<p>Followers: <span id="followers">{{ followers }}</span></p>
+	<p id="follows">Subscribed on: {{ follows }}</p>
+</div>
+
+<!-- Subscribe -->
+{% if user.is_authenticated %}
+	{% if user != profile %}
+		<button id="subscribe" data-profile="{{ profile.id }}"></button>
+	{% endif %}
+{% endif %}
+
+<!-- All posts -->
+
+<!-- For signed in - button to subscribe/unsubscribe -->
+
+{% endblock %}

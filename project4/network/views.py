@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Post
+from .models import User, Post, Follow
 
 from .forms import PostForm
 
@@ -14,7 +15,6 @@ def index(request):
     # if this is a POST request we need to process the form data
     if request.method == "POST":
         form = PostForm(request.POST)
-        print(f"Form: {form}")
 
         if form.is_valid():
             new_post = form.save(commit=False)
@@ -29,7 +29,6 @@ def index(request):
 
         # Get all posts in reverse order
         posts = Post.objects.all().order_by("-date")
-        print(f'Posts: {posts}')
 
         return render(request, "network/index.html", {
             "posts": posts,
@@ -87,3 +86,63 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def profile(request, user_id):
+
+    profile = User.objects.get(pk=user_id)
+    followers = Follow.objects.filter(target=profile).count()
+    follows =  Follow.objects.filter(follower=profile).count()
+
+    # Check if the user follows the profile
+    is_subscribed = False
+    # Use try/except for query
+    try:
+        f = followers.filter()
+    except:
+        is_subscribed = False
+    # Send to template result
+    
+    return render(request, "network/profile.html", {
+        "profile": profile,
+        "followers": followers,
+        "follows": follows,
+    })
+
+
+# Follow/unfollow function
+@login_required
+def follow(request, target_id):
+    target = User.objects.get(pk=target_id)
+    follower = request.user
+
+    try:
+        is_subscribed = Follow.objects.get(target=target, follower=follower)
+        is_subscribed.delete()
+        return HttpResponse("just unsubscribed")
+    except:
+        f = Follow(target=target, follower=follower)
+        f.save()
+        return HttpResponse("just subscribed")
+
+    # if is_subscribed:
+    #     is_subscribed.delete()
+    #     return HttpResponse("Unsubscribed")
+    # else:
+    #     f = Follow(target=target, follower=follower)
+    #     f.save()
+    #     return HttpResponse("Subscribed")
+
+
+
+# Check if the user follows the profile
+@login_required
+def is_subscribed(request, target_id):
+    target = User.objects.get(pk=target_id)
+    follower = request.user
+
+    try:
+        is_subscribed = Follow.objects.get(target=target, follower=follower)
+        return HttpResponse("subscribed")
+    except:
+        return HttpResponse("unsubscribed")

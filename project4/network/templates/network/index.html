@@ -2,21 +2,25 @@
 
 {% block body %}
 <!-- Make toggle to hide/view New Post tab -->
-    <div class="NewPost">
-        <h2>New Post</h2>
-        <form action="{% url 'index' %}" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Submit">
-        </form>
-    </div>
+    {% if user.is_authenticated %}
+        <div class="NewPost">
+            <h2>New Post</h2>
+            <form action="{% url 'index' %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    {% endif %}
+    
 
     <div class="AllPosts">
         <h2>All Posts</h2>
         <ul>
             {% for post in posts %}
                 <li>
-                    <h5>{{ post.author }}</h5>
+                    <h5><a href="{% url 'profile' user_id=post.author.id %}">{{ post.author }}</a></h5>
+                    
                     <div>
                         <a href="#">Edit</a>
                     </div>

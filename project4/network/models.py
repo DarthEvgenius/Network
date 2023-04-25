@@ -17,6 +17,12 @@ class Post(models.Model):
         return f"{self.author} on {self.date.strftime('%d %b %y, %H:%M:%S')}"
 
 
+# Following
+class Follow(models.Model):
+    target = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed_by")
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscribed_on")
 
-# Follower
+    def __str__(self):
+        return f"{self.follower} subscribed on {self.target}"
+
 # Liked posts for user
