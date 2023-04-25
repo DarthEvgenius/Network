@@ -94,15 +94,6 @@ def profile(request, user_id):
     followers = Follow.objects.filter(target=profile).count()
     follows =  Follow.objects.filter(follower=profile).count()
 
-    # Check if the user follows the profile
-    is_subscribed = False
-    # Use try/except for query
-    try:
-        f = followers.filter()
-    except:
-        is_subscribed = False
-    # Send to template result
-    
     return render(request, "network/profile.html", {
         "profile": profile,
         "followers": followers,
@@ -110,9 +101,10 @@ def profile(request, user_id):
     })
 
 
-# Follow/unfollow function
 @login_required
 def follow(request, target_id):
+    """If the user is subscribed on target profile - it will unsubscribe. And vise versa."""
+
     target = User.objects.get(pk=target_id)
     follower = request.user
 
@@ -125,19 +117,10 @@ def follow(request, target_id):
         f.save()
         return HttpResponse("just subscribed")
 
-    # if is_subscribed:
-    #     is_subscribed.delete()
-    #     return HttpResponse("Unsubscribed")
-    # else:
-    #     f = Follow(target=target, follower=follower)
-    #     f.save()
-    #     return HttpResponse("Subscribed")
 
-
-
-# Check if the user follows the profile
 @login_required
 def is_subscribed(request, target_id):
+    """Check if user follows target profile"""
     target = User.objects.get(pk=target_id)
     follower = request.user
 
