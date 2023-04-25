@@ -121,11 +121,12 @@ def follow(request, target_id):
 @login_required
 def is_subscribed(request, target_id):
     """Check if user follows target profile"""
+
     target = User.objects.get(pk=target_id)
     follower = request.user
 
     try:
-        is_subscribed = Follow.objects.get(target=target, follower=follower)
+        Follow.objects.get(target=target, follower=follower)
         return HttpResponse("subscribed")
     except:
         return HttpResponse("unsubscribed")
