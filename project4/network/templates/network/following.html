@@ -1,0 +1,22 @@
+{% extends "network/layout.html" %}
+
+{% block title %}
+	Following posts
+{% endblock %}
+
+{% block body %}
+	<div class="following">
+		<h2>Following Posts</h2>
+		<ul>
+			{% for post in posts %}
+				<li>
+					<h5><a href="">{{ post.author }}</a></h5>
+					<p>{{ post.content }}</p>
+					<p>{{ post.date }}</p>
+				</li>
+			{% empty %}
+				<p>There are no posts yet!</p>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}

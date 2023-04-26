@@ -132,3 +132,31 @@ def is_subscribed(request, target_id):
         return HttpResponse("subscribed")
     except:
         return HttpResponse("unsubscribed")
+
+
+def following_posts(request):
+    """Shows all followed posts"""
+
+    # Get needed Follow instances
+    follow = Follow.objects.filter(follower=request.user)
+
+    # Get all following User instances
+    followers = []
+    for target in follow:
+        u = User.objects.get(followed_by=target)
+        followers.append(u)
+    
+    # Get all following Post instances
+    posts = []
+    for user in followers:
+        # Get ste of posts of current author
+        user_posts = Post.objects.filter(author=user)
+        # Append each post to main set
+        for post in user_posts:
+            posts.append(post)
+
+    print(posts)
+    
+    return render(request, "network/following.html", {
+        "posts": posts
+    }) 
