@@ -5,11 +5,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from operator import attrgetter
+from django.core.paginator import Paginator
+# from django.views.generic import ListView
 
 from .models import User, Post, Follow
 
 from .forms import PostForm
 
+
+# class PostListView(ListView):
+#     paginate_by = 3
+#     model = Post
 
 def index(request):
 
@@ -31,8 +37,14 @@ def index(request):
         # Get all posts in reverse order
         posts = Post.objects.all().order_by("-date")
 
+        paginator = Paginator(posts, 10)
+        page_number = request.GET.get('page')
+        print(page_number)
+        page_obj = paginator.get_page(page_number)
+
         return render(request, "network/index.html", {
             "posts": posts,
+             "page_obj": page_obj,
             "form": post_form
     })
 
