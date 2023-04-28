@@ -27,6 +27,12 @@
 		<li>
 			<p>{{ post.content }}</p>
 			<p>{{ post.date }}</p>
+
+			{% if post.author == user %}
+				<div>
+					<a href="#">Edit</a>
+				</div>
+			{% endif %}
 		</li>
 	{% endfor %}
 </ul>

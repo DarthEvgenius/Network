@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from operator import attrgetter
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
 # from django.views.generic import ListView
 
 from .models import User, Post, Follow
@@ -173,4 +174,32 @@ def following_posts(request):
 
     return render(request, "network/following.html", {
         "posts": posts
-    }) 
+    })
+
+
+@csrf_exempt
+@login_required
+def edit_post(request, post_id):
+    """Author of the post can edit it"""
+
+    if request.method != "POST":
+        return HttpResponse({"error": "POST request required."}, status=400)
+    
+    # if request.method == "PUT":
+    #     return HttpResponse({"error": "POST request required."}, status=400)
+    
+    if request.method == "POST":
+        try:
+            post = Post.objects.get(pk=post_id)
+        except:
+            return HttpResponse("Post doesn't exist.")
+
+        if request.user == post.author:
+            # Get data from request
+            data = request.body
+            # Decode data to text
+            data = data.decode("utf-8")
+            print(data)
+            post.content = data
+            post.save()
+            return HttpResponse(data)
