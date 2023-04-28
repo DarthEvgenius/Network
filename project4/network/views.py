@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from operator import attrgetter
 
 from .models import User, Post, Follow
 
@@ -149,14 +150,15 @@ def following_posts(request):
     # Get all following Post instances
     posts = []
     for user in followers:
-        # Get ste of posts of current author
+        # Get set of posts of current author
         user_posts = Post.objects.filter(author=user)
         # Append each post to main set
         for post in user_posts:
             posts.append(post)
 
-    print(posts)
-    
+    # Sort posts in reverse order by date
+    posts = sorted(posts, key=attrgetter("date"), reverse=True)
+
     return render(request, "network/following.html", {
         "posts": posts
     }) 
