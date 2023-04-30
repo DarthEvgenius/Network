@@ -37,8 +37,6 @@ def index(request):
 
         # Get all posts in reverse order
         posts = Post.objects.all().order_by("-date")
-        
-        print(f"\n\n {request.user.liked_posts.all() } \n\n")
 
         paginator = Paginator(posts, 10)
         page_number = request.GET.get('page')
@@ -46,7 +44,7 @@ def index(request):
 
         return render(request, "network/index.html", {
             "posts": posts,
-             "page_obj": page_obj,
+            "page_obj": page_obj,
             "form": post_form
     })
 
@@ -149,6 +147,7 @@ def is_subscribed(request, target_id):
         return HttpResponse("unsubscribed")
 
 
+@login_required
 def following_posts(request):
     """Shows all followed posts"""
 
@@ -203,3 +202,29 @@ def edit_post(request, post_id):
             post.content = data
             post.save()
             return HttpResponse(data)
+
+
+@login_required
+def like_post(request, post_id):
+    """Like/unlike post"""
+
+    user = request.user
+
+    try:
+        post = Post.objects.get(pk=post_id)
+    except:
+        return HttpResponse("Invalid post id")
+
+    # Check if user has already liked post
+    try:
+        is_liked = user.liked_posts.get(pk=post_id)
+        user.liked_posts.remove(post)
+        count = user.liked_posts.all().count()
+        print(f"\n\n like_post {user.liked_posts.all()} \n\n")
+        return HttpResponse("unliked", count)
+    except:
+        user.liked_posts.add(post)
+        count = user.liked_posts.all().count()
+        print(f"\n\n like_post {user.liked_posts.all()} \n\n")
+        return HttpResponse("liked", count)
+
