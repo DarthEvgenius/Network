@@ -7,7 +7,7 @@ from django.urls import reverse
 from operator import attrgetter
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
-# from django.views.generic import ListView
+from django.db.models import Count
 
 from .models import User, Post, Follow
 
@@ -37,10 +37,11 @@ def index(request):
 
         # Get all posts in reverse order
         posts = Post.objects.all().order_by("-date")
+        
+        # print(f"\n\n {l}  {c[10].likes__count} \n\n")
 
         paginator = Paginator(posts, 10)
         page_number = request.GET.get('page')
-        print(page_number)
         page_obj = paginator.get_page(page_number)
 
         return render(request, "network/index.html", {
@@ -199,7 +200,6 @@ def edit_post(request, post_id):
             data = request.body
             # Decode data to text
             data = data.decode("utf-8")
-            print(data)
             post.content = data
             post.save()
             return HttpResponse(data)

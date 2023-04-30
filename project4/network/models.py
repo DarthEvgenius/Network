@@ -11,10 +11,12 @@ class Post(models.Model):
     # Or we can user built-in "_set" manager: Username_set.all()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     content = models.CharField(max_length=150)
+    # We can use related name from User model: Username.liked_posts.all()
+    likes = models.ManyToManyField(User, blank=True, verbose_name="Users that liked post", related_name="liked_posts")
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.author} on {self.date.strftime('%d %b %y, %H:%M:%S')}"
+        return f"[{self.id}] {self.author} on {self.date.strftime('%d %b %y, %H:%M:%S')}"
 
 
 # Following
