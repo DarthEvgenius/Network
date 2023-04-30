@@ -98,7 +98,7 @@ function add_form(content_element, old_content, post_id, edit_btn) {
 	// Create input form
 	const form = document.createElement('form');
 	form.id = 'form_' + post_id;
-	form.className = 'w-50';
+	form.className = 'w-75';
 
 	const form_group = document.createElement('div');
 	form_group.className = 'form-group';

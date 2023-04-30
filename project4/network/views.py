@@ -38,7 +38,7 @@ def index(request):
         # Get all posts in reverse order
         posts = Post.objects.all().order_by("-date")
         
-        # print(f"\n\n {l}  {c[10].likes__count} \n\n")
+        print(f"\n\n {request.user.liked_posts.all() } \n\n")
 
         paginator = Paginator(posts, 10)
         page_number = request.GET.get('page')
