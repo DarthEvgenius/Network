@@ -24,13 +24,13 @@
 <h2>Posts of {{ profile }}:</h2>
 <ul>
 	{% for post in posts %}
-		<li>
+		<li>			
 			<p>{{ post.content }}</p>
 			<p>{{ post.date }}</p>
 
 			{% if post.author == user %}
 				<div>
-					<a href="#">Edit</a>
+					<button class="edit" data-id="{{ post.id }}">Edit</button>
 				</div>
 			{% endif %}
 		</li>

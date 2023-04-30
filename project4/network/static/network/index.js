@@ -94,7 +94,7 @@ function new_post(post_id) {
 }
 
 // Add new form to the element, filled with content
-function add_form(content_element, old_content, post_id) {
+function add_form(content_element, old_content, post_id, edit_btn) {
 	// Create input form
 	const form = document.createElement('form');
 	form.id = 'form_' + post_id;
@@ -124,7 +124,11 @@ function add_form(content_element, old_content, post_id) {
 	submit.addEventListener('click', function(event) {
 		event.preventDefault();
 		new_post(post_id);
+
+		// Show edit button
+		edit_btn.style.display = 'inline-block';
 	});
+
 }
 
 // Make a text-area out of post and change content of post
@@ -141,10 +145,10 @@ function edit(edit_btn, post_id) {
 	const old_content = content_element.innerHTML;
 
 	// Create textarea with the old content of the post
-	add_form(content_element, old_content, post_id);
+	add_form(content_element, old_content, post_id, edit_btn);
 
 	// Show edit button
-	edit_btn.style.display = 'inline-block';
+	//edit_btn.style.display = 'inline-block';
 }
 
 
