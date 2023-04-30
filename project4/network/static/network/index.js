@@ -64,7 +64,7 @@ async function submit_post(post_id) {
 	// 	return content;
 	// })
 
-	const response = await fetch(`edit_post/${post_id}`, {
+	const response = await fetch(`/edit_post/${post_id}`, {
 			method: 'POST',
 			body: new_content
 		});

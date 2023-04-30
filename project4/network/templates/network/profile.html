@@ -25,7 +25,7 @@
 <ul>
 	{% for post in posts %}
 		<li>			
-			<p>{{ post.content }}</p>
+			<div id="content_{{ post.id }}">{{ post.content }}</div>
 			<p>{{ post.date }}</p>
 
 			{% if post.author == user %}
