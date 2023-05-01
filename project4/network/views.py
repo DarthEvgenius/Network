@@ -7,16 +7,12 @@ from django.urls import reverse
 from operator import attrgetter
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Count
+from django.http import JsonResponse
 
 from .models import User, Post, Follow
 
 from .forms import PostForm
 
-
-# class PostListView(ListView):
-#     paginate_by = 3
-#     model = Post
 
 def index(request):
 
@@ -213,18 +209,25 @@ def like_post(request, post_id):
     try:
         post = Post.objects.get(pk=post_id)
     except:
-        return HttpResponse("Invalid post id")
+        return JsonResponse({"error": "Post does not exist."}, status=400)
 
     # Check if user has already liked post
-    try:
-        is_liked = user.liked_posts.get(pk=post_id)
+    if user in post.likes.all():
+        # Remove user's like
         user.liked_posts.remove(post)
-        count = user.liked_posts.all().count()
-        print(f"\n\n like_post {user.liked_posts.all()} \n\n")
-        return HttpResponse("unliked", count)
-    except:
+        count = post.likes.all().count()
+        print("User out")
+        return JsonResponse({
+            "liked": False,
+            "likes_count": count
+            })
+    else:
+        # Set user's like
         user.liked_posts.add(post)
-        count = user.liked_posts.all().count()
-        print(f"\n\n like_post {user.liked_posts.all()} \n\n")
-        return HttpResponse("liked", count)
+        count = post.likes.all().count()
+        print("user in")
+        return JsonResponse({
+            "liked": True,
+            "likes_count": count
+            })
 

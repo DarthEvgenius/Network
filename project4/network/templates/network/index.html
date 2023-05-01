@@ -37,7 +37,7 @@
                     {% endif %}
 
                     <div id="content_{{ post.id }}" class="p-3 border w-50">{{ post.content }}</div>
-                    <div><b>{{ post.likes.count }}</b> Likes!
+                    <div><b id="likeCount_{{ post.id }}">{{ post.likes.count }}</b> Likes!
                         
                         {% if user in post.likes.all %}                            
                             <span class="hearts heart_like" data-id="{{ post.id }}" id="like_{{ post.id }}">
