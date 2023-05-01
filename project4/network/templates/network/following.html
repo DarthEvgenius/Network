@@ -10,8 +10,21 @@
 		<ul>
 			{% for post in posts %}
 				<li>
-					<h5><a href="">{{ post.author }}</a></h5>
-					<p>{{ post.content }}</p>
+					<h5><a href="{% url 'profile' user_id=post.author.id %}">{{ post.author }}</a></h5>
+					
+					<div id="content_{{ post.id }}" class="p-3 border w-50">{{ post.content }}</div>
+
+					<div><b id="likeCount_{{ post.id }}">{{ post.likes.count }}</b> Likes!
+                        
+                        {% if user in post.likes.all %}                            
+                            <span class="hearts heart_like" data-id="{{ post.id }}" id="like_{{ post.id }}">
+                            </span>
+                        {% else %}
+                            <span class="hearts heart_unlike" data-id="{{ post.id }}" id="like_{{ post.id }}">
+                            </span>
+                        {% endif %}
+                    </div>
+
 					<p>{{ post.date }}</p>
 				</li>
 			{% empty %}

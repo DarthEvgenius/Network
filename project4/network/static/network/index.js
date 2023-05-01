@@ -187,21 +187,12 @@ function like_post(post_id) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-	const svg_like = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-heart-fill" viewBox="0 0 16 16">
-	<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>`;
-	const svg_unlike = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-	<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-	</svg>`;
-
-	const heart = document.querySelectorAll('.heart_like');
-	heart.forEach(i => {
-		i.innerHTML = svg_like;
-	});
-
-	const heart_unlike = document.querySelectorAll('.heart_unlike');
-	heart_unlike.forEach(i => {
-		i.innerHTML = svg_unlike;
-	});
+	// New post form clear on focus
+	newPost_form = document.querySelector('#id_content');
+	newPost_form.onfocus = () => {
+		newPost_form.innerHTML = '';
+		document.querySelector('#newPost_submit').disabled = false;
+	}
 
 	const hearts = document.querySelectorAll('.hearts');
 	hearts.forEach(i => {
@@ -210,8 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			like_post(i.dataset.id);
 		});
 	});
-	
-	
 	
 	// Try to get subscribe button
 	subscribe_btn = document.querySelector('#subscribe');
@@ -224,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		subscribe_btn.addEventListener('click', follow);
 	}
 
-	// Edit post listener
+	// Edit post edit listener
 
 	// 1st variant doesn't work with several edit events
 	// Because id variable got rewritten

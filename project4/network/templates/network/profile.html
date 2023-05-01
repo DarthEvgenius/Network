@@ -6,9 +6,9 @@
 
 {% block body %}
 
-<h1>{{ profile }} ({{ profile.email }})</h1>
+<h1 class="px-4">{{ profile }} ({{ profile.email }})</h1>
 
-<div>
+<div class="p-3">
 	<p>Followers: <span id="followers">{{ followers }}</span></p>
 	<p id="follows">Subscribed on: {{ follows }}</p>
 </div>
@@ -21,18 +21,32 @@
 {% endif %}
 
 <!-- All posts -->
-<h2>Posts of {{ profile }}:</h2>
+<h2 class="p-3">Posts of {{ profile }}:</h2>
 <ul>
 	{% for post in posts %}
 		<li>			
-			<div id="content_{{ post.id }}">{{ post.content }}</div>
-			<p>{{ post.date }}</p>
+			<div id="content_{{ post.id }}" class="p-3 border w-50 mb-1">{{ post.content }}</div>
+			
 
 			{% if post.author == user %}
 				<div>
 					<button class="edit" data-id="{{ post.id }}">Edit</button>
 				</div>
 			{% endif %}
+
+			<div><b id="likeCount_{{ post.id }}">{{ post.likes.count }}</b> Likes!
+                        
+                        {% if user in post.likes.all %}                            
+                            <span class="hearts heart_like" data-id="{{ post.id }}" id="like_{{ post.id }}">
+                            </span>
+                        {% else %}
+                            <span class="hearts heart_unlike" data-id="{{ post.id }}" id="like_{{ post.id }}">
+                            </span>
+                        {% endif %}
+
+                    </div>
+			
+			<p>{{ post.date }}</p>
 		</li>
 	{% endfor %}
 </ul>

@@ -24,12 +24,13 @@ def index(request):
             new_post = form.save(commit=False)
             new_post.author = request.user
             new_post.save()
-
+            return HttpResponseRedirect(reverse("index"))
+        else:
             return HttpResponseRedirect(reverse("index"))
 
     # if a GET we'll create a blank form
     else:
-        post_form = PostForm()
+        post_form = PostForm(initial={"content": "Write something here..."})
 
         # Get all posts in reverse order
         posts = Post.objects.all().order_by("-date")
