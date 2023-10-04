@@ -1,5 +1,5 @@
 # Network
-Social network that allows users to make posts, follow other users, and “like” posts. Using Django, JavaScript, HTML, and CSS
+Social network that allows users to make posts, follow/unfollow other users, like/unlike posts. Using Django, JavaScript, HTML, and CSS.
 
 On backend Django app and SQLite database, implementing:
   -creation new users, 
